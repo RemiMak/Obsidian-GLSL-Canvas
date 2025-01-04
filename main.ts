@@ -1,4 +1,5 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+const GlslCanvas: any = require('glslCanvas');
 
 // Remember to rename these classes and interfaces!
 
@@ -14,12 +15,22 @@ export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
 
 	async onload() {
+
+		this.registerMarkdownCodeBlockProcessor('glsl', (source, el, ctx) => {
+			const glsl_canvas = el.createEl('canvas');
+			glsl_canvas.style.width = '100%';
+			const glsl_sandbox = new GlslCanvas(glsl_canvas);
+			const fragmentShader = source;
+			glsl_sandbox.load(fragmentShader);
+		});
+
+
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
+			new Notice('This is a REMI!');
 		});
 		// Perform additional things with the ribbon
 		ribbonIconEl.addClass('my-plugin-ribbon-class');
@@ -122,7 +133,7 @@ class SampleSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Setting #1')
-			.setDesc('It\'s a secret')
+			.setDesc('It\'s a XD')
 			.addText(text => text
 				.setPlaceholder('Enter your secret')
 				.setValue(this.plugin.settings.mySetting)
