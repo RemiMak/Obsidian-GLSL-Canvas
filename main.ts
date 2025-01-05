@@ -21,7 +21,8 @@ export default class MyPlugin extends Plugin {
 
 		this.addSettingTab(new SampleSettingTab(this.app, this));
 
-		this.registerMarkdownCodeBlockProcessor('glsl', (source, el, ctx) => {
+		this.registerMarkdownCodeBlockProcessor('glsl_render', (source, el, ctx) => {
+			
 			const glsl_canvas = el.createEl('canvas');
 			const glsl_context = glsl_canvas.getContext('webgl');
 			if (!glsl_context) {
