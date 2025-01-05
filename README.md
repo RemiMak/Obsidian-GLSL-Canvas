@@ -9,3 +9,7 @@ Please note that this plugin is still in development and might cause unexpected 
 
 ## Installation
 You can use the obsidian BRAT plugin to install this plugin.
+
+## Screenshots
+
+![image](https://github.com/user-attachments/assets/1d7f2940-08d9-4a1e-8ddf-3bde9801e98b)
