@@ -4,17 +4,22 @@ const GlslCanvas: any = require('glslCanvas');
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
-	mySetting: string;
+	defaultShaderWidthPercentage: string;
+	defaultShaderAspectRatio: string;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+	defaultShaderWidthPercentage: '50',
+	defaultShaderAspectRatio: '1'
 }
 
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
 
 	async onload() {
+		await this.loadSettings();
+
+		this.addSettingTab(new SampleSettingTab(this.app, this));
 
 		this.registerMarkdownCodeBlockProcessor('glsl', (source, el, ctx) => {
 			const glsl_canvas = el.createEl('canvas');
@@ -35,8 +40,8 @@ export default class MyPlugin extends Plugin {
 			// if there is no syntax error, display the shader to the user
 			else {
 				// default width and aspect ratio
-				glsl_canvas.style.width = '50%';
-				glsl_canvas.style.aspectRatio = '1';
+				glsl_canvas.style.width = this.settings.defaultShaderWidthPercentage + '%';
+				glsl_canvas.style.aspectRatio = this.settings.defaultShaderAspectRatio;
 				
 				// user defined width and aspect ratio
 				const {width, aspect_ratio} = this.getCanvasSizeParameters(source);
@@ -57,8 +62,6 @@ export default class MyPlugin extends Plugin {
 				glsl_sandbox.load(fragmentShader);
 			}			
 		});
-
-		await this.loadSettings();
 	}
 
 	checkShaderSyntax(gl_context: WebGLRenderingContext, shader_code: string) : string | null{
@@ -135,6 +138,13 @@ export default class MyPlugin extends Plugin {
 		}
 	}
 
+	refreshView(): void {
+		const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (markdownView) {
+			markdownView.previewMode.rerender(true);
+		}
+	}
+
 	onunload() {
 		
 	}
@@ -145,22 +155,6 @@ export default class MyPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
-	}
-}
-
-class SampleModal extends Modal {
-	constructor(app: App) {
-		super(app);
-	}
-
-	onOpen() {
-		const {contentEl} = this;
-		contentEl.setText('Woah!');
-	}
-
-	onClose() {
-		const {contentEl} = this;
-		contentEl.empty();
 	}
 }
 
@@ -177,15 +171,30 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+		containerEl.createEl('div', {text: 'Settings for GLSL Plugin, reload the page to see changes'});
+
 		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a XD')
+			.setName('Default Shader Width Percentage')
+			.setDesc('The percentage of the screen width the shader will take up')
 			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
+				.setPlaceholder('50')
+				.setValue(this.plugin.settings.defaultShaderWidthPercentage)
 				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
+					this.plugin.settings.defaultShaderWidthPercentage = value;
+					this.plugin.refreshView();
 					await this.plugin.saveSettings();
 				}));
+		
+		new Setting(containerEl)
+			.setName('Default Shader Aspect Ratio')
+			.setDesc('The aspect ratio of the shader')
+			.addText(text => text
+				.setPlaceholder('1')
+				.setValue(this.plugin.settings.defaultShaderAspectRatio)
+				.onChange(async (value) => {
+					this.plugin.settings.defaultShaderAspectRatio = value;
+					this.plugin.refreshView();
+					await this.plugin.saveSettings();
+				}))
 	}
 }
