@@ -34,13 +34,17 @@ export default class MyPlugin extends Plugin {
 			
 			// if there is no syntax error, display the shader to the user
 			else {
-				glsl_canvas.style.width = '100%';
+				glsl_canvas.style.margin = '0 auto';
+				glsl_canvas.style.display = 'block';
+				glsl_canvas.style.width = '50%';
+				glsl_canvas.style.height = 'auto';
+				glsl_canvas.style.aspectRatio = '1/1';
+				
 				const glsl_sandbox = new GlslCanvas(glsl_canvas);
 				const fragmentShader = source;
 				glsl_sandbox.load(fragmentShader);
 			}			
 		});
-
 
 		await this.loadSettings();
 
@@ -170,7 +174,7 @@ export default class MyPlugin extends Plugin {
 	}
 
 	onunload() {
-
+		
 	}
 
 	async loadSettings() {
