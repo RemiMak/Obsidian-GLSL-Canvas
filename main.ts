@@ -1,8 +1,6 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 const GlslCanvas: any = require('glslCanvas');
 
-// Remember to rename these classes and interfaces!
-
 interface MyPluginSettings {
 	defaultShaderWidthPercentage: string;
 	defaultShaderAspectRatio: string;
@@ -40,7 +38,6 @@ export default class MyPlugin extends Plugin {
 			
 			// if there is no syntax error, display the shader to the user
 			else {
-				// default width and aspect ratio
 				glsl_canvas.style.width = this.settings.defaultShaderWidthPercentage + '%';
 				glsl_canvas.style.aspectRatio = this.settings.defaultShaderAspectRatio;
 				
@@ -89,8 +86,8 @@ export default class MyPlugin extends Plugin {
 
 	getCanvasSizeParameters(shader_code: string) : {width: string | null, aspect_ratio: string | null} {
 		const lines = shader_code.split('\n');
-		const width_line = lines.find(line => line.includes('glsl_canvas_width'));
-		const aspectRatio_line = lines.find(line => line.includes('glsl_canvas_aspect_ratio'));
+		const width_line = lines.find(line => line.includes('glsl_canvas_width') && line.includes('//'));
+		const aspectRatio_line = lines.find(line => line.includes('glsl_canvas_aspect_ratio') && line.includes('//'));
 
 		const width = width_line ? (width_line.split('=')[1]) : null;
 		const aspect_ratio = aspectRatio_line ? (aspectRatio_line.split('=')[1]) : null;
