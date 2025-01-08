@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-glsl-canvas",
 	"name": "Obsidian GLSL Canvas",
-	"version": "1.0.0",
+	"version": "0.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "A port of GLSL Canvas for Obsidian, allowing you to write and preview GLSL shaders in your notes.",
 	"author": "Remi Makinwa",
