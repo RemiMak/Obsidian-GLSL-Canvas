@@ -1,4 +1,4 @@
-import { Editor, MarkdownPostProcessorContext, MarkdownView } from 'obsidian';
+import { Editor, MarkdownPostProcessorContext, MarkdownView, Workspace } from 'obsidian';
 import { RenderParams } from './renderGLSL';
 import { GLSLSettings } from './main';
 
@@ -24,20 +24,24 @@ export function checkShaderSyntax(gl_context: WebGLRenderingContext, shader_code
     }
 }
 
-export function getRenderParams(
-    settings: GLSLSettings,
-    editor: Editor, 
-    el: HTMLElement, 
-    ctx: MarkdownPostProcessorContext
-): RenderParams {
+
+export function getParamsLine(workspace: Workspace, el: HTMLElement, ctx: MarkdownPostProcessorContext): string | undefined {
+    const editor = workspace.getActiveViewOfType(MarkdownView)?.editor;
+    if (!editor) { return; }
+
+    const params_line_number: number | undefined = ctx.getSectionInfo(el)?.lineStart;
+    if (!params_line_number) { return; }
+
+    const params_line = editor.getLine(params_line_number);
+    return params_line;
+}
+
+
+export function parseRenderParams(settings: GLSLSettings, raw_params_line: string): RenderParams {
     var width = settings.defaultShaderWidthPercentage + "%";
     var aspect_ratio = settings.defaultShaderAspectRatio;
 
-    const params_line: number | undefined = ctx.getSectionInfo(el)?.lineStart;
-    if (!params_line) { return {width_percentage: width, aspect_ratio} as RenderParams; }
-
-    const raw_params = editor.getLine(params_line);
-    const raw_params_array = raw_params.split(' ').filter(param => param !== '').slice(1);
+    const raw_params_array = raw_params_line.split(' ').filter(param => param !== '').slice(1);
 
     raw_params_array.forEach(param => {
         // width percentage
