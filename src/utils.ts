@@ -1,4 +1,4 @@
-import { Editor, MarkdownPostProcessorContext, MarkdownView, Workspace } from 'obsidian';
+import { MarkdownPostProcessorContext, MarkdownView, Workspace } from 'obsidian';
 import { RenderParams } from './renderGLSL';
 import { GLSLSettings } from './main';
 
