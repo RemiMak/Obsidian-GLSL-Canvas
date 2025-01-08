@@ -1,4 +1,6 @@
-import { MarkdownView } from 'obsidian';
+import { Editor, MarkdownPostProcessorContext, MarkdownView } from 'obsidian';
+import { RenderParams } from './renderGLSL';
+import { GLSLSettings } from './main';
 
 export function checkShaderSyntax(gl_context: WebGLRenderingContext, shader_code: string) : string | null{
     const shader = gl_context.createShader(gl_context.FRAGMENT_SHADER);
@@ -22,16 +24,45 @@ export function checkShaderSyntax(gl_context: WebGLRenderingContext, shader_code
     }
 }
 
+export function getRenderParams(
+    settings: GLSLSettings,
+    editor: Editor, 
+    el: HTMLElement, 
+    ctx: MarkdownPostProcessorContext
+): RenderParams {
+    var width = settings.defaultShaderWidthPercentage + "%";
+    var aspect_ratio = settings.defaultShaderAspectRatio;
 
-export function getCanvasSizeParameters(shader_code: string) : {width: string | null, aspect_ratio: string | null} {
-    const lines = shader_code.split('\n');
-    const width_line = lines.find(line => line.includes('glsl_canvas_width') && line.includes('//'));
-    const aspectRatio_line = lines.find(line => line.includes('glsl_canvas_aspect_ratio') && line.includes('//'));
+    const params_line: number | undefined = ctx.getSectionInfo(el)?.lineStart;
+    if (!params_line) { return {width_percentage: width, aspect_ratio} as RenderParams; }
 
-    const width = width_line ? (width_line.split('=')[1]) : null;
-    const aspect_ratio = aspectRatio_line ? (aspectRatio_line.split('=')[1]) : null;
+    const raw_params = editor.getLine(params_line);
+    const raw_params_array = raw_params.split(' ').filter(param => param !== '').slice(1);
 
-    return {width, aspect_ratio};
+    raw_params_array.forEach(param => {
+        // width percentage
+        if (param.includes("%")) { 
+            var percentage = parseInt(param.replace("%", ""));
+            
+            if (percentage) {
+                percentage = Math.clamp(percentage, 0, 100);
+                width = percentage.toString() + "%";
+            }
+        }
+        
+        // aspect ratio
+        else if (param.includes(":")) { 
+            var values = param.split(":");
+            var num_values = values.map(value => parseInt(value));
+            var valid_values = num_values.filter(value => Boolean(value) && value > 0);
+            if (valid_values.length == 2) {
+                values = valid_values.map(value => value.toString());
+                aspect_ratio = values.join("/");
+            }
+        }
+    });
+
+    return {width_percentage: width, aspect_ratio} as RenderParams;
 }
 
 

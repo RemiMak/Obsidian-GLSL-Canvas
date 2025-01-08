@@ -1,16 +1,16 @@
-import { MarkdownPostProcessorContext } from 'obsidian';
-import { checkShaderSyntax, createErrorElement, getCanvasSizeParameters } from './utils';
-import { GLSLSettings } from './main';
+import { checkShaderSyntax, createErrorElement } from './utils';
 const GlslCanvas: any = require('glslCanvas');
 
-export default function renderGLSL(
+export interface RenderParams {
+    width_percentage: string;
+    aspect_ratio: string;
+}
+
+export function renderGLSL(
     source: string, 
     el: HTMLElement, 
-    ctx: MarkdownPostProcessorContext,
-    settings: GLSLSettings
+    params: RenderParams,
 ) {
-    console.log(ctx.getSectionInfo(el)?.text);
-
     const glsl_canvas = el.createEl('canvas');
     const glsl_context = glsl_canvas.getContext('webgl');
 
@@ -26,7 +26,7 @@ export default function renderGLSL(
     }
     
     else {
-        displayShaderToUser(glsl_canvas, source, settings);
+        displayShaderToUser(glsl_canvas, source, params);
     }			
 }
 
@@ -70,19 +70,9 @@ function displayErrorMessageToUser(el: HTMLElement, error_message: string, sourc
 }
 
 
-function displayShaderToUser(glsl_canvas: HTMLElement, source: string, settings: GLSLSettings) {
-    glsl_canvas.style.width = settings.defaultShaderWidthPercentage + '%';
-    glsl_canvas.style.aspectRatio = settings.defaultShaderAspectRatio;
-    
-    // user defined width and aspect ratio
-    const {width, aspect_ratio} = getCanvasSizeParameters(source);
-    if (width) {
-        glsl_canvas.style.width = width;
-    }
-
-    if (aspect_ratio) {
-        glsl_canvas.style.aspectRatio = aspect_ratio;
-    }
+function displayShaderToUser(glsl_canvas: HTMLElement, source: string, params: RenderParams) {
+    glsl_canvas.style.width = params.width_percentage;
+    glsl_canvas.style.aspectRatio = params.aspect_ratio;
 
     glsl_canvas.style.margin = '0 auto';
     glsl_canvas.style.display = 'block';

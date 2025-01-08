@@ -1,6 +1,6 @@
-import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import renderGLSL from './renderGLSL';
-import { refreshView } from './utils';
+import { App, MarkdownView, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { renderGLSL } from './renderGLSL';
+import { refreshView, getRenderParams as getRenderParams } from './utils';
 
 export default class MyPlugin extends Plugin {
 	settings: GLSLSettings;
@@ -11,7 +11,11 @@ export default class MyPlugin extends Plugin {
 		this.addSettingTab(new GLSLSettingsTab(this.app, this));
 
 		this.registerMarkdownCodeBlockProcessor('glsl_render', (source, el, ctx) => {
-			renderGLSL(source, el, ctx, this.settings);
+			const editor = this.app.workspace.getActiveViewOfType(MarkdownView)?.editor;
+			if (!editor) { return; }
+
+			const params = getRenderParams(this.settings, editor, el, ctx);
+			renderGLSL(source, el, params);
 		});
 	}
 
