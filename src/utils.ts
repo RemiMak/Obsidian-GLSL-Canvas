@@ -30,7 +30,7 @@ export function getParamsLine(workspace: Workspace, el: HTMLElement, ctx: Markdo
     if (!editor) { return; }
 
     const params_line_number: number | undefined = ctx.getSectionInfo(el)?.lineStart;
-    if (!params_line_number) { return; }
+    if (params_line_number === undefined) { return; }
 
     const params_line = editor.getLine(params_line_number);
     return params_line;

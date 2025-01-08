@@ -1,4 +1,5 @@
 import { checkShaderSyntax, createErrorElement } from './utils';
+import { MarkdownPostProcessorContext, MarkdownRenderChild } from 'obsidian';
 const GlslCanvas: any = require('glslCanvas');
 
 export interface RenderParams {
@@ -9,15 +10,23 @@ export interface RenderParams {
 export function renderGLSL(
     source: string, 
     el: HTMLElement, 
+    ctx: MarkdownPostProcessorContext,
     params: RenderParams,
 ) {
-    const glsl_canvas = el.createEl('canvas');
+    const glsl_render_child = new MarkdownRenderChild(createEl('canvas'));
+    const glsl_canvas = glsl_render_child.containerEl as HTMLCanvasElement;
+    ctx.addChild(glsl_render_child);
+    el.appendChild(glsl_canvas);
+    
     const glsl_context = glsl_canvas.getContext('webgl');
-
     if (!glsl_context) {
         displayDeviceIncompatibilityMessage(el);
         return
     }
+
+    glsl_render_child.onunload = () => { 
+        glsl_context.getExtension('WEBGL_lose_context')?.loseContext(); 
+    };
 
     const error_message = checkShaderSyntax(glsl_context, source);
     

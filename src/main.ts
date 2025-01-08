@@ -1,4 +1,4 @@
-import { App, MarkdownView, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { renderGLSL } from './renderGLSL';
 import { refreshView, parseRenderParams, getParamsLine } from './utils';
 
@@ -15,8 +15,15 @@ export default class MyPlugin extends Plugin {
 			if (!params_line) { return; }
 
 			const params = parseRenderParams(this.settings, params_line);
-			renderGLSL(source, el, params);
+			renderGLSL(source, el, ctx, params);
 		});
+
+		// needed to make sure that custom renderparams are respected immediately in reading view!
+		this.registerEvent( 
+			this.app.workspace.on('layout-change', () => {
+				refreshView();
+			})
+		)
 	}
 
 	async loadSettings() {
@@ -51,7 +58,7 @@ class GLSLSettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('div', {text: 'Settings for GLSL Plugin, reload the page to see changes'});
+		containerEl.createEl('div', {text: 'Settings for GLSL Plugin, note that changes are not applied immediately in editing mode (requires a page reload)'});
 
 		new Setting(containerEl)
 			.setName('Default Shader Width Percentage')
