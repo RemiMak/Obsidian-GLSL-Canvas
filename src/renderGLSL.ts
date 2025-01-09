@@ -29,6 +29,8 @@ export function renderGLSL(
         glsl_context.getExtension('WEBGL_lose_context')?.loseContext(); 
     };
 
+    console.log(params.float_precision);
+
     // pre-pend float precision declaration to fragment shader
     const float_precision_declaration = `
         #ifdef GL_ES\n

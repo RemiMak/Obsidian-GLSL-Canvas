@@ -77,14 +77,6 @@ export function parseRenderParams(settings: GLSLSettings, raw_params_line: strin
 }
 
 
-export function refreshView(): void {
-    const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
-    if (markdownView) {
-        markdownView.previewMode.rerender(true);
-    }
-}
-
-
 export function createErrorElement(error_message: string): HTMLElement {
     const error_message_el = createEl('div');
     error_message_el.style.color = 'red';

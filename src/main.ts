@@ -1,6 +1,6 @@
 import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { renderGLSL } from './renderGLSL';
-import { refreshView, parseRenderParams, getParamsLine } from './utils';
+import { parseRenderParams, getParamsLine } from './utils';
 
 export default class MyPlugin extends Plugin {
 	settings: GLSLSettings;
@@ -17,13 +17,6 @@ export default class MyPlugin extends Plugin {
 			const params = parseRenderParams(this.settings, params_line);
 			renderGLSL(source, el, ctx, params);
 		});
-
-		// hack to make sure that custom renderparams are respected immediately in reading view
-		this.registerEvent( 
-			this.app.workspace.on('layout-change', () => {
-				refreshView();
-			})
-		)
 	}
 
 	async loadSettings() {
@@ -60,7 +53,7 @@ class GLSLSettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('div', {text: 'Settings for GLSL Plugin, note that changes are not applied immediately in editing mode (requires a page reload)'});
+		containerEl.createEl('div', {text: 'Settings for GLSL Plugin, note that changes are not shown until the page is reloaded'});
 
 		new Setting(containerEl)
 			.setName('Default Shader Width Percentage')
@@ -70,7 +63,6 @@ class GLSLSettingsTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.defaultShaderWidthPercentage)
 				.onChange(async (value) => {
 					this.plugin.settings.defaultShaderWidthPercentage = value;
-					refreshView();
 					await this.plugin.saveSettings();
 				}));
 		
@@ -82,7 +74,6 @@ class GLSLSettingsTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.defaultShaderAspectRatio)
 				.onChange(async (value) => {
 					this.plugin.settings.defaultShaderAspectRatio = value;
-					refreshView();
 					await this.plugin.saveSettings();
 				}))
 		
@@ -98,7 +89,6 @@ class GLSLSettingsTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.defaultFloatPrecision)
 				.onChange(async (value) => {
 					this.plugin.settings.defaultFloatPrecision = value;
-					refreshView();
 					await this.plugin.saveSettings();
 				}));
 	}
