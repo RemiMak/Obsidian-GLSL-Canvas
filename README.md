@@ -8,7 +8,11 @@ The uniforms you can use in your shaders are as follows:
 
 For all variables and functions available to you, please refer to the [GLSL documentation](https://registry.khronos.org/OpenGL-Refpages/gl4/index.php) (or the [book of shaders glossary](https://thebookofshaders.com/glossary/))
 
-Please note that this plugin is still in development and might cause unexpected behaviors/crashes, so please save your work before using it (and open an issue if you encounter any problems 😁). 
+Please note that this plugin is still in development and might cause unexpected behaviors/crashes, so please save your work before using it (and feel more than free to open an issue if you encounter any problems 😁). 
+
+<p align="center" style="margin: 0;">
+  <img src="https://github.com/user-attachments/assets/07058edc-3f4d-4468-8e83-0d44b924b8b6" style="width: 100%; height: auto;" />
+</p>
 
 ## Quickstart
 
@@ -20,7 +24,7 @@ uniform float u_time;
 
 void main() {
 	vec2 st = gl_FragCoord.xy / u_resolution;
-    gl_FragColor = vec4(st.x, st.y, 0.0,1.0);
+	gl_FragColor = vec4(st.x, st.y, 0.0,1.0);
 }
 ```
 
@@ -35,8 +39,4 @@ You can use the obsidian BRAT plugin to install this plugin.
 
 ## Contributing
 
-If you have any suggestions or issues, please open an issue or a pull request. [See the obsidian plugin documentation](https://docs.obsidian.md/Plugins/Getting+started/Build+a+plugin) for more information on how to contribute.
-
-## Screenshots
-
-![image](https://github.com/user-attachments/assets/1d7f2940-08d9-4a1e-8ddf-3bde9801e98b)
+If you have any suggestions or issues, please open an issue or a pull request. If you're new to obsidian plugins, [see the obsidian plugin documentation](https://docs.obsidian.md/Plugins/Getting+started/Build+a+plugin) for more information on how to contribute.
