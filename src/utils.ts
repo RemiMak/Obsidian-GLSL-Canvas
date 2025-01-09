@@ -38,9 +38,11 @@ export function getParamsLine(workspace: Workspace, el: HTMLElement, ctx: Markdo
 
 
 export function parseRenderParams(settings: GLSLSettings, raw_params_line: string): RenderParams {
-    var width = settings.defaultShaderWidthPercentage + "%";
+    var width_percentage = settings.defaultShaderWidthPercentage + "%";
     var aspect_ratio = settings.defaultShaderAspectRatio;
+    var float_precision = settings.defaultFloatPrecision; 
 
+    const float_precisions = ["low", "medium", "high"];
     const raw_params_array = raw_params_line.split(' ').filter(param => param !== '').slice(1);
 
     raw_params_array.forEach(param => {
@@ -50,7 +52,7 @@ export function parseRenderParams(settings: GLSLSettings, raw_params_line: strin
             
             if (percentage) {
                 percentage = Math.clamp(percentage, 0, 100);
-                width = percentage.toString() + "%";
+                width_percentage = percentage.toString() + "%";
             }
         }
         
@@ -64,9 +66,14 @@ export function parseRenderParams(settings: GLSLSettings, raw_params_line: strin
                 aspect_ratio = values.join("/");
             }
         }
+
+        // float precision
+        else if (float_precisions.includes(param.toLocaleLowerCase())) {
+            float_precision = param.toLocaleLowerCase() + "p";
+        }
     });
 
-    return {width_percentage: width, aspect_ratio} as RenderParams;
+    return {width_percentage, aspect_ratio, float_precision} as RenderParams;
 }
 
 

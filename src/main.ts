@@ -18,7 +18,7 @@ export default class MyPlugin extends Plugin {
 			renderGLSL(source, el, ctx, params);
 		});
 
-		// needed to make sure that custom renderparams are respected immediately in reading view!
+		// hack to make sure that custom renderparams are respected immediately in reading view
 		this.registerEvent( 
 			this.app.workspace.on('layout-change', () => {
 				refreshView();
@@ -38,11 +38,13 @@ export default class MyPlugin extends Plugin {
 export interface GLSLSettings {
 	defaultShaderWidthPercentage: string;
 	defaultShaderAspectRatio: string;
+	defaultFloatPrecision: string;
 }
 
 const DEFAULT_SETTINGS: GLSLSettings = {
 	defaultShaderWidthPercentage: '50',
-	defaultShaderAspectRatio: '1'
+	defaultShaderAspectRatio: '1',
+	defaultFloatPrecision: 'mediump'
 }
 
 class GLSLSettingsTab extends PluginSettingTab {
@@ -83,5 +85,21 @@ class GLSLSettingsTab extends PluginSettingTab {
 					refreshView();
 					await this.plugin.saveSettings();
 				}))
+		
+		new Setting(containerEl)
+			.setName('Default Float Precision')
+			.setDesc('The float precision of the shader')
+			.addDropdown(dropdown => dropdown
+				.addOptions({
+					'lowp': 'low',
+					'mediump': 'medium (recommended)',
+					'highp': 'high'
+				})
+				.setValue(this.plugin.settings.defaultFloatPrecision)
+				.onChange(async (value) => {
+					this.plugin.settings.defaultFloatPrecision = value;
+					refreshView();
+					await this.plugin.saveSettings();
+				}));
 	}
 }
