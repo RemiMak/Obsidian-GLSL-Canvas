@@ -5,6 +5,7 @@ const GlslCanvas: any = require('glslCanvas');
 export interface RenderParams {
     width_percentage: string;
     aspect_ratio: string;
+    float_precision: string;
 }
 
 export function renderGLSL(
@@ -27,6 +28,15 @@ export function renderGLSL(
     glsl_render_child.onunload = () => { 
         glsl_context.getExtension('WEBGL_lose_context')?.loseContext(); 
     };
+
+    // pre-pend float precision declaration to fragment shader
+    const float_precision_declaration = `
+        #ifdef GL_ES\n
+        precision ${params.float_precision} float;\n
+        #endif\n
+    `;
+
+    source = float_precision_declaration + source;
 
     const error_message = checkShaderSyntax(glsl_context, source);
     
@@ -89,5 +99,6 @@ function displayShaderToUser(glsl_canvas: HTMLElement, source: string, params: R
     
     const glsl_sandbox = new GlslCanvas(glsl_canvas);
     const fragmentShader = source;
-    glsl_sandbox.load(fragmentShader);		
+
+    glsl_sandbox.load(fragmentShader);
 }
