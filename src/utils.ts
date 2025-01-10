@@ -63,7 +63,7 @@ export function parseRenderParams(settings: GLSLSettings, raw_params_line: strin
             var valid_values = num_values.filter(value => Boolean(value) && value > 0);
             if (valid_values.length == 2) {
                 values = valid_values.map(value => value.toString());
-                aspect_ratio = values.join("/");
+                aspect_ratio = values.join(":");
             }
         }
 

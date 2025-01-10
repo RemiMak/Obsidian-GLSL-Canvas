@@ -36,7 +36,7 @@ export interface GLSLSettings {
 
 const DEFAULT_SETTINGS: GLSLSettings = {
 	defaultShaderWidthPercentage: '50',
-	defaultShaderAspectRatio: '1',
+	defaultShaderAspectRatio: '1:1',
 	defaultFloatPrecision: 'mediump'
 }
 
@@ -70,7 +70,7 @@ class GLSLSettingsTab extends PluginSettingTab {
 			.setName('Default Shader Aspect Ratio')
 			.setDesc('The aspect ratio of the shader')
 			.addText(text => text
-				.setPlaceholder('1')
+				.setPlaceholder('1:1')
 				.setValue(this.plugin.settings.defaultShaderAspectRatio)
 				.onChange(async (value) => {
 					this.plugin.settings.defaultShaderAspectRatio = value;

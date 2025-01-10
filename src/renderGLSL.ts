@@ -16,6 +16,7 @@ export function renderGLSL(
 ) {
     const glsl_render_child = new MarkdownRenderChild(createEl('canvas'));
     const glsl_canvas = glsl_render_child.containerEl as HTMLCanvasElement;
+
     ctx.addChild(glsl_render_child);
     el.appendChild(glsl_canvas);
     
@@ -29,14 +30,11 @@ export function renderGLSL(
         glsl_context.getExtension('WEBGL_lose_context')?.loseContext(); 
     };
 
-    console.log(params.float_precision);
-
     // pre-pend float precision declaration to fragment shader
-    const float_precision_declaration = `
-        #ifdef GL_ES\n
-        precision ${params.float_precision} float;\n
-        #endif\n
-    `;
+    const float_precision_declaration = 
+        `#ifdef GL_ES\n` +
+        `precision ${params.float_precision} float;\n` +
+        `#endif\n\n`;
 
     source = float_precision_declaration + source;
 
@@ -48,7 +46,7 @@ export function renderGLSL(
     
     else {
         displayShaderToUser(glsl_canvas, source, params);
-    }			
+    }
 }
 
 
@@ -93,7 +91,7 @@ function displayErrorMessageToUser(el: HTMLElement, error_message: string, sourc
 
 function displayShaderToUser(glsl_canvas: HTMLElement, source: string, params: RenderParams) {
     glsl_canvas.style.width = params.width_percentage;
-    glsl_canvas.style.aspectRatio = params.aspect_ratio;
+    glsl_canvas.style.aspectRatio = params.aspect_ratio.replace(':', '/'); // CSS aspect ratio is width / height
 
     glsl_canvas.style.margin = '0 auto';
     glsl_canvas.style.display = 'block';
