@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-glsl-canvas",
 	"version": "1.0.0",
-	"description": "A port of GLSL Canvas for Obsidian, allowing you to write and preview GLSL shaders in your notes.",
+	"description": "A port of GLSL Canvas for Obsidian, allowing you to write and display GLSL shaders in your notes.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

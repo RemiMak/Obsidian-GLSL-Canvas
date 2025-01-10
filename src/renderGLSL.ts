@@ -65,16 +65,12 @@ function displayErrorMessageToUser(el: HTMLElement, error_message: string, sourc
     const lines = source.split('\n');
     const error_line = parseInt(error_message.split(':')[2]);
     const code_el = el.createEl('pre');
-    code_el.style.whiteSpace = 'pre-wrap';
-    code_el.style.overflow = 'auto';
-    code_el.style.width = '100%';
-    code_el.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
-    code_el.style.padding = '10px';
+    el.addClass('glsl_code_block');
     el.appendChild(code_el);
 
     lines.forEach((line, i) => {
         const line_el = code_el.createEl('div');
-        line_el.style.font = '12px monospace';
+        line_el.addClass('glsl_code_line');
         
         if (line.length > 0) {
             line_el.setText(line);
@@ -83,7 +79,7 @@ function displayErrorMessageToUser(el: HTMLElement, error_message: string, sourc
         }
 
         if (i === error_line - 1) {
-            line_el.style.backgroundColor = 'rgb(255, 0, 0)';
+            line_el.addClass('glsl_error_line_highlight');
         }
     });
 }

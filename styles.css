@@ -1,0 +1,28 @@
+.glsl_error_message {
+    color: var(--text-error);
+    font-weight: var(--font-bold);
+    white-space: pre-wrap;
+    overflow: auto;
+    width: 100%;
+    background-color:rgba(var(--background-modifier-error-rgb), 0.2);
+    padding: var(--size-4-2);
+}
+
+.glsl_code_block {
+    white-space: pre-wrap;
+    overflow: auto;
+    width: 100%;
+    background-color: rgba(var(--background-modifier-rgb));
+}
+
+.glsl_code_line {
+    font-family: var(--font-monospace);
+    color: var(--text-muted);
+    font-size: var(--code-size);
+    tab-size: 4;
+}
+
+.glsl_error_line_highlight {
+    background-color: rgba(var(--background-modifier-error-rgb), 0.2);
+}
+

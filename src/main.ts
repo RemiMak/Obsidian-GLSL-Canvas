@@ -2,7 +2,7 @@ import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { renderGLSL } from './renderGLSL';
 import { parseRenderParams, getParamsLine } from './utils';
 
-export default class MyPlugin extends Plugin {
+export default class GLSLCanvasPlugin extends Plugin {
 	settings: GLSLSettings;
 
 	async onload() {
@@ -41,9 +41,9 @@ const DEFAULT_SETTINGS: GLSLSettings = {
 }
 
 class GLSLSettingsTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	plugin: GLSLCanvasPlugin;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: GLSLCanvasPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -53,11 +53,9 @@ class GLSLSettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('div', {text: 'Settings for GLSL Plugin, note that changes are not shown until the page is reloaded'});
-
 		new Setting(containerEl)
-			.setName('Default Shader Width Percentage')
-			.setDesc('The percentage of the page width the shader will take up')
+			.setName('Default shader width Percentage')
+			.setDesc('The percentage of the page width the shader will take up, requires a page reload to take effect')
 			.addText(text => text
 				.setPlaceholder('50')
 				.setValue(this.plugin.settings.defaultShaderWidthPercentage)
@@ -67,8 +65,8 @@ class GLSLSettingsTab extends PluginSettingTab {
 				}));
 		
 		new Setting(containerEl)
-			.setName('Default Shader Aspect Ratio')
-			.setDesc('The aspect ratio of the shader')
+			.setName('Default shader aspect ratio')
+			.setDesc('The aspect ratio of the shader, requires a page reload to take effect')
 			.addText(text => text
 				.setPlaceholder('1:1')
 				.setValue(this.plugin.settings.defaultShaderAspectRatio)
@@ -78,8 +76,8 @@ class GLSLSettingsTab extends PluginSettingTab {
 				}))
 		
 		new Setting(containerEl)
-			.setName('Default Float Precision')
-			.setDesc('The float precision of the shader')
+			.setName('Default float precision')
+			.setDesc('The float precision of the shader, requires a page reload to take effect')
 			.addDropdown(dropdown => dropdown
 				.addOptions({
 					'lowp': 'low',
