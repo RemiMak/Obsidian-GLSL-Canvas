@@ -8,8 +8,6 @@ The uniforms you can use in your shaders are as follows:
 
 For all variables and functions available to you, please refer to the [GLSL documentation](https://registry.khronos.org/OpenGL-Refpages/gl4/index.php) (or the [book of shaders glossary](https://thebookofshaders.com/glossary/))
 
-Please note that this plugin is still in development, so please save your work before using it (and feel more than free to open an issue if you encounter any problems 😁). 
-
 <p align="center" style="margin: 0;">
   <img src="https://github.com/user-attachments/assets/82440f76-c4bf-4ea8-a376-3ef297a96f9b" style="width: 100%; height: auto;" />
 </p>
@@ -35,7 +33,7 @@ By default you will get a square that takes up 50% of your note's width. You can
 For more advanced use-cases, we can additionally set the float precision the same way; either by re-defining the default precision in the plugin's settings or right after declaring the codeblock's language: `glsl_render 100% 16:3 high`
 
 ## Installation
-You can use the obsidian BRAT plugin to install this plugin.
+You can use the [BRAT plugin](https://tfthacker.com/brat-quick-guide) to install this plugin. Please note that this plugin is still in development, so please save your work before using it (and feel more than free to open an issue if you encounter any problems 😁). 
 
 ## Contributing
 
