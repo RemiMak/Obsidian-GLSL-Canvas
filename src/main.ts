@@ -1,5 +1,5 @@
 import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { renderGLSL } from './renderGLSL';
+import { renderGLSL, RenderParams } from './renderGLSL';
 import { parseRenderParams, getParamsLine } from './utils';
 
 export default class GLSLCanvasPlugin extends Plugin {
@@ -10,12 +10,19 @@ export default class GLSLCanvasPlugin extends Plugin {
 
 		this.addSettingTab(new GLSLSettingsTab(this.app, this));
 
+		let render_params = {
+			width_percentage: this.settings.defaultShaderWidthPercentage + "%",
+			aspect_ratio: this.settings.defaultShaderAspectRatio,
+			float_precision: this.settings.defaultFloatPrecision
+		}
+
 		this.registerMarkdownCodeBlockProcessor('glsl_render', (source, el, ctx) => {
 			const params_line = getParamsLine(this.app.workspace, el, ctx);
-			if (!params_line) { return; }
+			if (params_line) {
+				render_params = parseRenderParams(this.settings, params_line);
+			}
 
-			const params = parseRenderParams(this.settings, params_line);
-			renderGLSL(source, el, ctx, params);
+			renderGLSL(source, el, ctx, render_params);
 		});
 	}
 
