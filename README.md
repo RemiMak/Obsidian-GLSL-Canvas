@@ -38,9 +38,3 @@ You can use the [BRAT plugin](https://tfthacker.com/brat-quick-guide) to install
 ## Contributing
 
 If you have any suggestions or issues, please open an issue or a pull request. If you're new to obsidian plugins, [see the obsidian plugin documentation](https://docs.obsidian.md/Plugins/Getting+started/Build+a+plugin) for more information on how to contribute.
-
-## Support
-
-If you've found this plugin useful and/or want to support its development, consider buying me a coffee!
-
-<a href='https://ko-fi.com/E1E0122B65' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
